@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>signup</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<form action="/signUp" method="post">
+    <ul>
+        <li>name: <input type="text" name="name"></li>
+        <li>password: <input type="password" name="password"/></li>
+        <li>confirm password: <input type="password" name="confirmPassword"/></li>
+        <li>mail:<input type="text" name="mail"/><button id="verifyMail" type="button">发送验证码</button></li>
+
+        <li>mail验证码:<input type="text" name="mailVerify"/></li>
+        <input type="submit" value="ok"/>
+    </ul>
+</form>
+</body>
+<script>
+    $("#verifyMail").click(function () {
+        var mailValue = $("input[name='mail']").val();
+        $.ajax({
+            type: "POST",
+            url:"/verifyMail",
+            data:{mail:mailValue},
+            dataType:"json",
+            success: function (data) {
+
+                alert("验证码"+ data['Number'])
+            },
+            error:function () {
+                alert("Error")
+            }
+        })
+    })
+</script>
+</html>
