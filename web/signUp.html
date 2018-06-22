@@ -11,29 +11,20 @@
         <li>name: <input type="text" name="name"></li>
         <li>password: <input type="password" name="password"/></li>
         <li>confirm password: <input type="password" name="confirmPassword"/></li>
-        <li>mail:<input type="text" name="mail"/><button id="verifyMail" type="button">发送验证码</button></li>
+        <li>mail:<input type="text" name="mail"/>
+            <p style="display: none"></p>
+            <button id="verifyMail" type="button" style="display: none">发送验证码</button>
+            <p style="display:none;"></p>
+        </li>
 
-        <li>mail验证码:<input type="text" name="mailVerify"/></li>
-        <input type="submit" value="ok"/>
+        <li>mail验证码:<input type="text" name="mailVerify"/>
+            <p style="display: none"></p>
+        </li>
+        <input type="submit" value="SIGN UP"/>
     </ul>
 </form>
-</body>
-<script>
-    $("#verifyMail").click(function () {
-        var mailValue = $("input[name='mail']").val();
-        $.ajax({
-            type: "POST",
-            url:"/verifyMail",
-            data:{mail:mailValue},
-            dataType:"json",
-            success: function (data) {
 
-                alert("验证码"+ data['Number'])
-            },
-            error:function () {
-                alert("Error")
-            }
-        })
-    })
-</script>
+<input type="button" value="sign in" onclick="location.href='login.html'"/>
+</body>
+<script type="text/javascript" src="js/signup.js"></script>
 </html>
