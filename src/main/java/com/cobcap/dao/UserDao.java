@@ -26,7 +26,38 @@ public class UserDao {
     }
 
 
+    public boolean isExistName(String userName) throws SQLException {
+        String sql = "select * from USER where USERNAME = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userName);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+    }
+
     public void addUser(User user) {
+        String sql = "insert into USER (USERNAME, MAIL, PASSWORD) VALUE (?, ?, ?);";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getMail());
+            ps.setString(3, user.getPassword());
+
+            ps.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addUserWithUuid(User user) {
         String sql = "insert into USER (USERNAME, MAIL, PASSWORD, UUID) VALUE (?, ?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 

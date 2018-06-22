@@ -21,27 +21,19 @@ public class UtilDao {
     }
 
     public boolean isExistMail(String mail) throws SQLException {
-        ResultSet rs = null;
         String sql = "select * from USER where MAIL = ?;";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, mail);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if (rs != null) {
                 if (rs.next()) {
                     return true;
                 } else {
                     return false;
                 }
-            }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-
-        return false;
     }
 }

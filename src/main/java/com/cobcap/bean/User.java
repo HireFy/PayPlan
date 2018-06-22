@@ -12,6 +12,12 @@ public class User {
     private Timestamp deadLine;
     private int balance;
 
+    public User(String userName, String password, String mail) {
+        this.userName = userName;
+        this.password = password;
+        this.mail = mail;
+    }
+
     public User(String userName, String mail, String password, String uuid) {
         this.userName = userName;
         this.mail = mail;
@@ -28,6 +34,10 @@ public class User {
         this.payTime = payTime;
         this.deadLine = deadLine;
         this.balance = balance;
+    }
+
+    public User() {
+
     }
 
     public int getId() {
