@@ -80,8 +80,6 @@ function checkMailValid() {
         return false
     }
 
-    console.log("checkMail这句话不该执行")
-
     var patten = new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
     if (patten.test(value)) {
         var mailValue = $("input[name='mail']").val();
@@ -213,6 +211,7 @@ function checkName() {
         },
         dataType: "json",
         success: function (data) {
+            console.log("signup checkName ajax: " + data)
             if (data['isExist'] == 'true') {
                 inputName.next().show();
                 inputName.next().text("用户名已存在");

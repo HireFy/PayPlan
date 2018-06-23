@@ -40,7 +40,8 @@ public class SignUpServlet extends HttpServlet {
 
             resp.sendRedirect("/index");
         } else {
-            req.getRequestDispatcher("bang.html").forward(req, resp);
+            req.setAttribute("errorInfo", "验证码不正确");
+            req.getRequestDispatcher("bang.jsp").forward(req, resp);
         }
 
         System.out.println();

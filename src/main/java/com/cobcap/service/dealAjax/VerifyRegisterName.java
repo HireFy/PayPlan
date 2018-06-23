@@ -1,7 +1,7 @@
-package com.cobcap.service;
+package com.cobcap.service.dealAjax;
 
 import com.alibaba.fastjson.JSONObject;
-import com.cobcap.dao.UtilDao;
+import com.cobcap.dao.UserDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,25 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/verifyMailExist")
-public class VerifyMailExist extends HttpServlet {
+@WebServlet("/verifyRegisterName")
+public class VerifyRegisterName extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String mail = req.getParameter("mail");
-        UtilDao utilDao = new UtilDao();
+        String registerName = req.getParameter("registerName");
+
+        UserDao userDao = new UserDao();
         JSONObject jsonObject = new JSONObject();
+
         try {
-            if (utilDao.isExistMail(mail)) {
-                System.out.println("存在邮箱");
+            if (userDao.isExistName(registerName)) {
                 jsonObject.put("isExist", "true");
             } else {
-                System.out.println("不存在邮箱");
                 jsonObject.put("isExist", "false");
             }
-            resp.getWriter().print(jsonObject);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        resp.getWriter().print(jsonObject);
     }
 }

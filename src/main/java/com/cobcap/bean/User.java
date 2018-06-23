@@ -1,6 +1,7 @@
 package com.cobcap.bean;
 
-import java.sql.Timestamp;
+
+import java.sql.Date;
 
 public class User {
     private int id;
@@ -8,9 +9,14 @@ public class User {
     private String mail;
     private String password;
     private String uuid;
-    private Timestamp payTime;
-    private Timestamp deadLine;
+    private Date payTime;
+    private Date deadLine;
     private int balance;
+
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
 
     public User(String userName, String password, String mail) {
         this.userName = userName;
@@ -25,7 +31,7 @@ public class User {
         this.uuid = uuid;
     }
 
-    public User(int id, String userName, String mail, String password, String uuid, Timestamp payTime, Timestamp deadLine, int balance) {
+    public User(int id, String userName, String mail, String password, String uuid, Date payTime, Date deadLine, int balance) {
         this.id = id;
         this.userName = userName;
         this.mail = mail;
@@ -38,6 +44,15 @@ public class User {
 
     public User() {
 
+    }
+
+    public User(String userName, String mail, String uuid, Date payTime, Date deadLine, int balance) {
+        this.userName = userName;
+        this.mail = mail;
+        this.uuid = uuid;
+        this.payTime = payTime;
+        this.deadLine = deadLine;
+        this.balance = balance;
     }
 
     public int getId() {
@@ -80,19 +95,19 @@ public class User {
         this.uuid = uuid;
     }
 
-    public Timestamp getPayTime() {
+    public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
 
-    public Timestamp getDeadLine() {
+    public Date getDeadLine() {
         return deadLine;
     }
 
-    public void setDeadLine(Timestamp deadLine) {
+    public void setDeadLine(Date deadLine) {
         this.deadLine = deadLine;
     }
 

@@ -25,6 +25,38 @@ public class UserDao {
         return DriverManager.getConnection("jdbc:mysql://" + dbUrl + dbName, dbUser, dbPassword);
     }
 
+    public User getUserByName(String name) throws SQLException {
+        String sql = "select * from USER where USERNAME = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            User user = null;
+            if (rs.next()) {
+                String userName = rs.getString("USERNAME");
+                String mail = rs.getString("MAIL");
+                String uuid = rs.getString("UUID");
+                Date payTime = rs.getDate("PAYTIME");
+                Date deadLine = rs.getDate("DEADLINE");
+                int balance = rs.getInt("BALANCE");
+                user = new User(userName, mail, uuid, payTime, deadLine, balance);
+            }
+            return user;
+        }
+    }
+
+    public boolean isExistUser(User user) throws SQLException {
+        String sql = "select * from USER where userName = ? and PASSWORD = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getPassword());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
     public boolean isExistName(String userName) throws SQLException {
         String sql = "select * from USER where USERNAME = ?";
@@ -87,8 +119,8 @@ public class UserDao {
                 String mail = rs.getString("MAIL");
                 String userPassword = rs.getString("PASSWORD");
                 String uuid = rs.getString("UUID");
-                Timestamp payTime = rs.getTimestamp("PAYTIME");
-                Timestamp deadLine = rs.getTimestamp("DEADLINE");
+                Date payTime = rs.getDate("PAYTIME");
+                Date deadLine = rs.getDate("DEADLINE");
                 int balance = rs.getInt("BALANCE");
 
                 User user = new User(id, userName, mail, userPassword, uuid, payTime, deadLine, balance);

@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <form action="/login" method="post">
-    name: <input name="name" type="text">
-    password: <input name="password" type="password"/>
-    <input type="submit" value="登录">
+    <div>name: <input name="name" type="text">
+        <p style="display:none;"></p>
+    </div>
+    <div>
+        password: <input name="password" type="password"/>
+        <p style="display: none"></p>
+    </div>
+    <div>
+        <input type="submit" value="login">
+        <p style="display: none"></p>
+    </div>
 </form>
-
 <input type="button" value="sign up" onclick="location.href='signUp.html'"/>
+
 </body>
+<script src="js/login.js"></script>
 </html>
