@@ -13,8 +13,46 @@ var inputPass = $("input[name='password']")
 
 var inputName = $("input[name='name']")
 
+/*TODO 检测验证码按钮是否点击*/
+/*验证码按钮状态*/
+var isVerifyClicked = false
 
-verifyMailButton.click(function() {
+inputMail.blur(function () {
+    checkMailValid()
+});
+
+signup.mouseover(function () {
+    checkForm()
+})
+
+inputConfirmPass.blur(function () {
+    console.log("inputConfirmPass.blur()")
+    checkPass()
+})
+
+inputName.blur(function () {
+    checkName()
+})
+
+verifyMailButton.click(function () {
+    console.log("verifyButtom clicked")
+    /*确认验证码按钮点击*/
+    isVerifyClicked = true
+    sendMailNumber()
+})
+
+
+/*TODO 验证码输入框不能为空*/
+function checkMailNumver() {
+    var val = inputMailVerify.val()
+    if (val == '') {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function sendMailNumber() {
     var mailValue = inputMail.val();
     $.ajax({
         type: "POST",
@@ -23,27 +61,29 @@ verifyMailButton.click(function() {
             mail: mailValue
         },
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             /*console.log(data);
             console.log("success, verifynumber:" + data['number_server'])*/
             verifyMailButton.next().show()
             verifyMailButton.next().text("验证码发送成功")
         },
-        error: function(data) {
+        error: function (data) {
             console.log("send mail to server Error:" + data)
         }
     })
-});
+}
 
-/*检测邮箱是否合法是否注册*/
-inputMail.blur(function() {
+function checkMailValid() {
+    /*检测邮箱是否合法是否注册*/
     var value = inputMail.val();
     if (value == '') {
-        return
+        return false
     }
+
+    console.log("checkMail这句话不该执行")
+
     var patten = new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/);
     if (patten.test(value)) {
-        inputMail.next().show()
         var mailValue = $("input[name='mail']").val();
         //检测邮箱是否已经注册
         $.ajax({
@@ -53,18 +93,23 @@ inputMail.blur(function() {
                 mail: mailValue
             },
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 if (data['isExist'] == "true") {
+                    inputMail.next().show()
                     inputMail.next().text("邮箱已注册");
+                    return false;
 
                 } else {
+                    inputMail.next().show()
                     inputMail.next().text("OK");
                     verifyMailButton.show();
+                    return true;
                 }
 
             },
-            error: function(data) {
-                console.log(" verify mail Error")
+            error: function (data) {
+                console.log(" verify mail Error connot connect server")
+                return false
             }
         })
         // $(this).next().text("OK")
@@ -73,42 +118,93 @@ inputMail.blur(function() {
         inputMail.next().show()
         inputMail.next().text("ERROR")
         verifyMailButton.hide()
+        return false
     }
-})
+    return true
+}
 
-/*提交表单*/
-/*todo 检查所有要填的表单
-* */
-signup.mouseover(function() {
-    var objectArray = new Array(inputName, inputPass, inputConfirmPass,
-                                inputMail, inputMailVerify);
-    for (x in objectArray) {
-        if (x.val() == '') {
-            signup.attr("disabled", true);
-            signup.next().show();
-            signup.next().text("有空值");
-            break;
-        }
+function checkForm() {
+    /*检查提交表单*/
+    /*var nameOk = new Boolean(checkName());
+    var passOk = new Boolean(checkPass());
+    var mailOk = new Boolean(checkMailValid());*/
+    var nameOk = checkName();
+    var passOk = checkPass();
+    var mailOk = checkMailValid();
+    var mailNumberOk = checkMailNumver();
+
+    // console.log("hover!");
+    // var objectArray = new Array(inputName, inputPass, inputConfirmPass,
+    //     inputMail, inputMailVerify);
+    // for (var i = 0; i < objectArray.length; i++) {
+    //     if (objectArray[i].val() == '') {
+    //         console.log("objectArray[i].val():为空")
+    //         signup.attr("type", "button");
+    //         signup.next().show();
+    //         signup.next().text("有空值");
+    //         break;
+    //     } else if (i == objectArray.length - 1) {
+    //         console.log("objectArray[i].val():不为空")
+    //         signup.attr("type", "submit");
+    //         signup.next().hide();
+    //         /*signup.next().text("有空值");*/
+    //     }
+    // }
+
+
+    if (mailOk && passOk && nameOk && isVerifyClicked && mailNumberOk) {
+        console.log("mailOk, passOk, nameOk");
+        console.log("mailOk?:" + mailOk);
+        console.log("passOk?:" + passOk);
+        console.log("nameOk?:" + nameOk);
+        console.log("isVerifyClicked: " + isVerifyClicked)
+        console.log("mailNumberOk:" + mailNumberOk)
+        signup.attr("type", "submit");
+        signup.next().hide();
     }
+    else {
+        console.log("something wrong");
+        console.log("mailOk?:" + mailOk);
+        console.log("passOk?:" + passOk);
+        console.log("nameOk?:" + nameOk);
+        console.log("isVerifyClicked: " + isVerifyClicked)
+        console.log("mailNumberOk:" + mailNumberOk)
+        signup.attr("type", "button");
+        signup.next().show();
+        signup.next().text("something wrong");
+    }
+}
 
-})
-
-/*检测两次输入的密码是否一致*/
-inputConfirmPass.blur(function() {
+function checkPass() {
+    /*检测两次输入的密码是否一致*/
     var pass_origin = inputPass.val();
     var pass_confirm = inputConfirmPass.val();
 
+    if (pass_confirm == '' || pass_origin == '') {
+        console.log("密码检测为空")
+        inputConfirmPass.next().show();
+        inputConfirmPass.next().text("密码不能为空");
+        return false
+    }
+
     if (pass_confirm == pass_origin) {
-        inputConfirmPass.next().hide()
+        inputConfirmPass.next().hide();
+        return true;
     } else {
         inputConfirmPass.next().show();
         inputConfirmPass.next().text("两次输入不一致");
+        return false;
     }
-})
+}
 
-/*检测用户名是否存在*/
-inputName.blur(function() {
+function checkName() {
+    /*检测用户名是否存在*/
     var registerName = inputName.val()
+    if (registerName == '') {
+        inputName.next().show();
+        inputName.next().text("用户名不为空");
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: "/verifyRegisterName",
@@ -116,19 +212,24 @@ inputName.blur(function() {
             registerName: registerName
         },
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             if (data['isExist'] == 'true') {
                 inputName.next().show();
                 inputName.next().text("用户名已存在");
+                return false;
             } else {
                 inputName.next().hide();
+                return true;
             }
         },
-        error: function(data) {
-            console.log("register name error")
+        error: function (data) {
+            console.log("register name error connot connect server")
+            return false;
         }
-    })
-})
+    });
+    return true;
+
+}
 
 
 /*检测验证码输入是否正确*/
