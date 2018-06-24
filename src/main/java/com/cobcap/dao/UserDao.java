@@ -1,6 +1,7 @@
 package com.cobcap.dao;
 
 import com.cobcap.bean.User;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class UserDao {
     private String dbName = "/PayPlan";
     private String dbUser = "root";
     private String dbPassword = "linuxvimf";
+    private static final Logger logger = Logger.getLogger(UserDao.class);
 
     public UserDao() {
         try {
@@ -25,9 +27,20 @@ public class UserDao {
         return DriverManager.getConnection("jdbc:mysql://" + dbUrl + dbName, dbUser, dbPassword);
     }
 
+
+    public boolean updateUuidByName(String name, String uuid) throws SQLException {
+        String sql = "update USER set UUID = ? where USERNAME = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, uuid);
+            ps.setString(2, name);
+            logger.info("ps.executeUpdate: " + ps.executeUpdate());
+            return ps.executeUpdate() > 0 ? true : false;
+        }
+    }
+
     public User getUserByName(String name) throws SQLException {
         String sql = "select * from USER where USERNAME = ?";
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)){
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             User user = null;
@@ -74,7 +87,7 @@ public class UserDao {
         }
     }
 
-    public void addUser(User user) {
+    public boolean addUser(User user) throws SQLException {
         String sql = "insert into USER (USERNAME, MAIL, PASSWORD) VALUE (?, ?, ?);";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -82,10 +95,8 @@ public class UserDao {
             ps.setString(2, user.getMail());
             ps.setString(3, user.getPassword());
 
-            ps.execute();
+            return ps.execute();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 

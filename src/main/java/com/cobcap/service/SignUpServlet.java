@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/signUp")
 public class SignUpServlet extends HttpServlet {
@@ -34,11 +35,15 @@ public class SignUpServlet extends HttpServlet {
             User user = new User(name, password, mail);
 
             UserDao userDao = new UserDao();
-            userDao.addUser(user);
+            try {
+                userDao.addUser(user);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             session.setAttribute("userName", user.getUserName());
 
-            resp.sendRedirect("/index");
+            resp.sendRedirect("index.jsp");
         } else {
             req.setAttribute("errorInfo", "验证码不正确");
             req.getRequestDispatcher("bang.jsp").forward(req, resp);

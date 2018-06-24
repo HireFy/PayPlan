@@ -19,12 +19,12 @@
     </style>
 </head>
 <body>
-<h1>用户:${sessionScope.userName}</h1>
+<h1>用户:</h1><h2>${sessionScope.userName}</h2>
 
 <button>获取uuid</button>
 
 <h3>uuid:</h3>
-<p class="uuidBox"></p>
+<p class="uuidBox">${sessionScope.uuid}</p>
 
 <input type="button" value="login" onclick="location.href='login.html'"/>
 </body>

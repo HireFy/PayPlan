@@ -3,6 +3,7 @@ package com.cobcap.service;
 import com.alibaba.fastjson.JSONObject;
 import com.cobcap.bean.User;
 import com.cobcap.dao.UserDao;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,14 +16,16 @@ import java.sql.SQLException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+
+    public static final Logger logger = Logger.getLogger(LoginServlet.class);
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String name = req.getParameter("name");
         String password = req.getParameter("password");
 
-        System.out.println("name: " + name);
-        System.out.println("pass: " + password);
+        logger.info("name: " + name + " pass: " + password);
 
         User user = new User(name, password);
         UserDao userDao = new UserDao();
@@ -37,7 +40,10 @@ public class LoginServlet extends HttpServlet {
                 // TODO: 6/23/18 这里可能还需要传递user.mail, user.paytime
                 session.setAttribute("userName", user.getUserName());
                 session.setAttribute("uuid", user.getUuid());
-                resp.sendRedirect("/index");
+
+                logger.info("user.uuid: " + user.getUuid());
+
+                resp.sendRedirect("index.jsp");
             } else {
                 req.setAttribute("errorInfo", "用户名或密码错误");
                 req.getRequestDispatcher("bang.jsp").forward(req, resp);

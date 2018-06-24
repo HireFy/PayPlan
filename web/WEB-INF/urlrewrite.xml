@@ -6,7 +6,7 @@
 
 <urlrewrite>
 
-    <rule>
+    <!--<rule>
         <from>^/index</from>
         <to>index.jsp</to>
     </rule>
@@ -14,6 +14,6 @@
     <rule>
         <from>/[a-z][A-Z][0-9]+</from>
         <to>/[a-z][A-Z][0-9]+.html</to>
-    </rule>
+    </rule>-->
 
 </urlrewrite>

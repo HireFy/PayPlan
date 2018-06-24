@@ -1,24 +1,40 @@
 var uuidBox = $("p.uuidBox")
 var button = $("button");
-var name = $("h1");
+var userName = $("h2")
 
-if(uuidBox.text() == ''){
-    button.show()
+/*userName.mouseover(function () {
+    console.log(userName.text)
+})*/
+
+showOrHideUuidBox();
+
+function showOrHideUuidBox() {
+    if(uuidBox.text() == ''){
+        button.show()
+    }
+    else{
+        button.hide()
+    }
 }
-else{
-    button.hide()
-}
+
 
 button.click(function () {
+    var name = userName.text();
     $.ajax({
         type: "post",
         url: "/getUuid",
         data:{
-            name: name.text()
+            name: name
         },
         dataType: "json",
         success:function (data) {
-            uuidBox.text(data['uuid'])
+            if (data['uuid'] != 'error') {
+                uuidBox.text(data['uuid']);
+                showOrHideUuidBox();
+            } else {
+                uuidBox.text("发生了错误")
+            }
+
         },
         error:function (data) {
             console.log("error when get uuid from server!")
