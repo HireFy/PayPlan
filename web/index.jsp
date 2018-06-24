@@ -24,7 +24,13 @@
 <button>获取uuid</button>
 
 <h3>uuid:</h3>
-<p class="uuidBox">${sessionScope.uuid}</p>
+<p class="uuidP">${sessionScope.uuid}</p>
+
+<h3>缴费时间:</h3>
+<p class="payTimeP">${sessionScope.payTime}</p>
+
+<h3>到期时间:</h3>
+<p class="deadLineP">${sessionScope.deadLine}</p>
 
 <input type="button" value="login" onclick="location.href='login.html'"/>
 </body>

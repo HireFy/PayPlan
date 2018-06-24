@@ -40,6 +40,8 @@ public class LoginServlet extends HttpServlet {
                 // TODO: 6/23/18 这里可能还需要传递user.mail, user.paytime
                 session.setAttribute("userName", user.getUserName());
                 session.setAttribute("uuid", user.getUuid());
+                session.setAttribute("payTime", user.getPayTime());
+                session.setAttribute("deadLine", user.getDeadLine());
 
                 logger.info("user.uuid: " + user.getUuid());
 

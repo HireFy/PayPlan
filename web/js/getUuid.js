@@ -1,4 +1,4 @@
-var uuidBox = $("p.uuidBox")
+var uuidP = $("p.uuidP")
 var button = $("button");
 var userName = $("h2")
 
@@ -6,10 +6,10 @@ var userName = $("h2")
     console.log(userName.text)
 })*/
 
-showOrHideUuidBox();
+showOrHideUuidP();
 
-function showOrHideUuidBox() {
-    if(uuidBox.text() == ''){
+function showOrHideUuidP() {
+    if(uuidP.text() == ''){
         button.show()
     }
     else{
@@ -29,10 +29,10 @@ button.click(function () {
         dataType: "json",
         success:function (data) {
             if (data['uuid'] != 'error') {
-                uuidBox.text(data['uuid']);
-                showOrHideUuidBox();
+                uuidP.text(data['uuid']);
+                showOrHideUuidP();
             } else {
-                uuidBox.text("发生了错误")
+                uuidP.text("发生了错误")
             }
 
         },
